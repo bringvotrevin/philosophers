@@ -6,7 +6,7 @@
 /*   By: dim <dim@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 16:39:23 by dim               #+#    #+#             */
-/*   Updated: 2022/02/05 19:22:18 by dim              ###   ########.fr       */
+/*   Updated: 2022/02/07 19:34:04 by dim              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,12 @@ typedef struct s_personal
 {
 	int				name;
 	int				num_eaten;
+	int				num_must_eat;
 	t_info			*info;
-	pthread_t		tid;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
-	pthread_mutex_t	*mutex_print;
+	pthread_mutex_t	*m_print;
+	pthread_t		tid;
 }	t_personal;
 
 t_info		*parsing(int argc, char **argv);

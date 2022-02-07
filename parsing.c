@@ -6,7 +6,7 @@
 /*   By: dim <dim@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 16:49:52 by dim               #+#    #+#             */
-/*   Updated: 2022/02/05 20:02:12 by dim              ###   ########.fr       */
+/*   Updated: 2022/02/07 16:27:37 by dim              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ t_info	*parsing(int argc, char **argv)
 	if (argc == 6)
 		info->num_must_eat = ft_atoi(argv[5]);
 	if (info->num_of_philo < 0 && info->time_die < 0
+		info->num_must_eat = ft_atoi(argv[5]);
 			&& info->time_eat < 0 && info->time_sleep < 0)
 		return (NULL);
 	return (info);

@@ -6,26 +6,85 @@
 /*   By: dim <dim@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 16:39:19 by dim               #+#    #+#             */
-/*   Updated: 2022/02/05 20:06:34 by dim              ###   ########.fr       */
+/*   Updated: 2022/02/07 19:40:58 by dim              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-// void	philosopher()
-// {
-// 	int i;
 
-// 	i = 0;
-// 	while ()
-// 	{
-// 		i = 1;
-// 	}
-// }
+long	get_time()
+{
+	struct timeval time;
+
+	gettime(&time, NULL);
+	
+}
+
+void	print_state(t_personal *philo, char *msg)
+{
+	pthread_mutex_lock(philo->m_print);
+	printf("%llms", get_time())
+	printf("%d %s\n", philo->name, msg);
+	pthread_mutex_unlock(philo->m_print);
+}
+
+void	eating(t_personal *philo)
+{
+	usleep(philo->info->time_eat);
+	print_state(philo, "is eating");
+	philo->num_eaten++;
+}
+
+void	philo_odd(t_personal *philo)
+{
+	pthread_mutex_lock(fork[(philo->name + 1) % i]);
+	print_state(philo, "has taken a fork");
+	pthread_mutex_lock(fork[philo->name]);
+	print_state(philo, "has taken a fork");
+	eating();
+	pthread_mutex_unlock(fork[(philo->name + 1) % i]);
+	pthread_mutex_unlock(fork[philo->name]);
+}
+
+void	philo_even(t_personal *philo)
+{
+	pthread_mutex_lock(fork[philo->name]);
+	print_state(philo, "has taken a fork",);
+	pthread_mutex_lock(fork[(philo->name + 1) % i]);
+	print_state(philo, "has taken a fork");
+	eating();
+	pthread_mutex_unlock(fork[philo->name]);
+	pthread_mutex_unlock(fork[(philo->name + 1) % i]);
+
+}
+
+void	philosopher(t_personal *philo)
+{
+	while()
+	{
+		if (philo->name % 2 == 1)
+			philo_odd(philo);
+		else
+			philo_even(philo);
+		sleeping(philo);
+		thinking(philo);
+	}
+}
 
 int		create_thread(t_info *info)
 {
-	(void)info;
+	int	i;
+
+	i = 0;
+	while (++i < info->num_of_philo)
+	{
+		if (pthread_create(&info->philosophers[i]->tid
+			NULL, philosopher, info->philosophers[i]) != 0)
+			return (0);
+		
+	}
+
 	return (0);
 }
 
@@ -56,11 +115,12 @@ int		make_philo_fork(t_info *info)
 		pthread_mutex_init(&(info->forks[i]), NULL);
 		info->philosophers[i].name = i;
 		info->philosophers[i].num_eaten = 0;
+		info->philosophers[i].num_must_eat = info->num_must_eat;
 		info->philosophers[i].info = info;
 		info->philosophers[i].left_fork = &info->forks[i];
 		info->philosophers[i].right_fork =
 			&info->forks[i + 1 / info->num_of_philo];
-		info->philosophers[i].mutex_print = &(info->mutex_for_print);
+		info->philosophers[i].m_print = &(info->mutex_for_print);
 	}
 	return (1);
 }
