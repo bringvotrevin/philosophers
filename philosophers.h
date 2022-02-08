@@ -6,7 +6,7 @@
 /*   By: dim <dim@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 16:39:23 by dim               #+#    #+#             */
-/*   Updated: 2022/02/07 19:34:04 by dim              ###   ########.fr       */
+/*   Updated: 2022/02/08 17:35:34 by dim              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ typedef struct s_info
 	struct s_personal	*philosophers;
 	pthread_mutex_t		*forks;
 	pthread_mutex_t		mutex_for_print;
+	long				start_time;
 }	t_info;
 
 typedef struct s_personal

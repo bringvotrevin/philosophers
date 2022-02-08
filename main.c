@@ -6,26 +6,27 @@
 /*   By: dim <dim@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 16:39:19 by dim               #+#    #+#             */
-/*   Updated: 2022/02/07 19:40:58 by dim              ###   ########.fr       */
+/*   Updated: 2022/02/08 17:37:50 by dim              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-
-long	get_time()
+long	get_time(t_personal *philo)
 {
-	struct timeval time;
+	struct timeval	time;
 
-	gettime(&time, NULL);
-	
+	gettimeofday(&time, NULL);
+	return (time.tv_usec / 1000 - philo->info->start_time);
 }
 
 void	print_state(t_personal *philo, char *msg)
 {
+	long	mstime;
+
 	pthread_mutex_lock(philo->m_print);
-	printf("%llms", get_time())
-	printf("%d %s\n", philo->name, msg);
+	printf("%ldms", get_time(philo));
+	printf(" %d %s\n", philo->name, msg);
 	pthread_mutex_unlock(philo->m_print);
 }
 
@@ -38,38 +39,44 @@ void	eating(t_personal *philo)
 
 void	philo_odd(t_personal *philo)
 {
-	pthread_mutex_lock(fork[(philo->name + 1) % i]);
+	pthread_mutex_lock(philo->right_fork);
 	print_state(philo, "has taken a fork");
-	pthread_mutex_lock(fork[philo->name]);
+	pthread_mutex_lock(philo->left_fork);
 	print_state(philo, "has taken a fork");
-	eating();
-	pthread_mutex_unlock(fork[(philo->name + 1) % i]);
-	pthread_mutex_unlock(fork[philo->name]);
+	eating(philo);
+	pthread_mutex_unlock(philo->right_fork);
+	pthread_mutex_unlock(philo->left_fork);
 }
 
 void	philo_even(t_personal *philo)
 {
-	pthread_mutex_lock(fork[philo->name]);
-	print_state(philo, "has taken a fork",);
-	pthread_mutex_lock(fork[(philo->name + 1) % i]);
+	pthread_mutex_lock(philo->left_fork);
 	print_state(philo, "has taken a fork");
-	eating();
-	pthread_mutex_unlock(fork[philo->name]);
-	pthread_mutex_unlock(fork[(philo->name + 1) % i]);
+	pthread_mutex_lock(philo->right_fork);
+	print_state(philo, "has taken a fork");
+	eating(philo);
+	pthread_mutex_unlock(philo->left_fork);
+	pthread_mutex_unlock(philo->right_fork);
 
 }
 
-void	philosopher(t_personal *philo)
+void	*ft_philosopher(void *data)
 {
-	while()
+	t_personal *philo;
+	philo = (t_personal *)data;
+	while(1)
 	{
 		if (philo->name % 2 == 1)
 			philo_odd(philo);
 		else
 			philo_even(philo);
-		sleeping(philo);
-		thinking(philo);
+		if (philo->num_must_eat == philo->num_eaten)
+			break;
+		// sleeping(philo);
+		// thinking(philo);
+		printf("!!\n");
 	}
+	return (NULL);
 }
 
 int		create_thread(t_info *info)
@@ -77,14 +84,15 @@ int		create_thread(t_info *info)
 	int	i;
 
 	i = 0;
-	while (++i < info->num_of_philo)
+	while (++i <= info->num_of_philo)
 	{
-		if (pthread_create(&info->philosophers[i]->tid
-			NULL, philosopher, info->philosophers[i]) != 0)
+		if (pthread_create(&(info->philosophers[i].tid),
+			NULL, ft_philosopher, (void *)&info->philosophers[i]) != 0)
 			return (0);
-		
 	}
-
+	i = 0;
+	while (++i <= info->num_of_philo)
+		pthread_join(info->philosophers[i].tid, NULL);
 	return (0);
 }
 
@@ -119,7 +127,7 @@ int		make_philo_fork(t_info *info)
 		info->philosophers[i].info = info;
 		info->philosophers[i].left_fork = &info->forks[i];
 		info->philosophers[i].right_fork =
-			&info->forks[i + 1 / info->num_of_philo];
+			&info->forks[(i + 1) % info->num_of_philo];
 		info->philosophers[i].m_print = &(info->mutex_for_print);
 	}
 	return (1);

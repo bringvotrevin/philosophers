@@ -6,7 +6,7 @@
 /*   By: dim <dim@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 16:49:52 by dim               #+#    #+#             */
-/*   Updated: 2022/02/07 16:27:37 by dim              ###   ########.fr       */
+/*   Updated: 2022/02/08 17:38:22 by dim              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	init_info(t_info *info)
 	info->time_eat = 0;
 	info->time_sleep = 0;
 	info->num_must_eat = -1;
+	info->start_time = 0;
 }
 
 t_info	*parsing(int argc, char **argv)
@@ -59,11 +60,11 @@ t_info	*parsing(int argc, char **argv)
 	info->time_die = ft_atoi(argv[2]);
 	info->time_eat = ft_atoi(argv[3]);
 	info->time_sleep = ft_atoi(argv[4]);
+	info->start_time = get_time(info->philosophers);
 	if (argc == 6)
 		info->num_must_eat = ft_atoi(argv[5]);
-	if (info->num_of_philo < 0 && info->time_die < 0
-		info->num_must_eat = ft_atoi(argv[5]);
-			&& info->time_eat < 0 && info->time_sleep < 0)
+	if (info->num_of_philo < 0 || info->time_die < 0
+		|| info->time_eat < 0 || info->time_sleep < 0)
 		return (NULL);
 	return (info);
 }
