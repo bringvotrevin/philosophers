@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dim <dim@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: dim <dim@student.42seoul.kr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 16:39:19 by dim               #+#    #+#             */
-/*   Updated: 2022/02/08 17:37:50 by dim              ###   ########.fr       */
+/*   Updated: 2022/02/10 01:55:01 by dim              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,11 @@ long	get_time(t_personal *philo)
 	struct timeval	time;
 
 	gettimeofday(&time, NULL);
-	return (time.tv_usec / 1000 - philo->info->start_time);
+	return ((time.tv_usec - philo->info->start_time) / 1000);
 }
 
 void	print_state(t_personal *philo, char *msg)
 {
-	long	mstime;
-
 	pthread_mutex_lock(philo->m_print);
 	printf("%ldms", get_time(philo));
 	printf(" %d %s\n", philo->name, msg);
@@ -32,8 +30,8 @@ void	print_state(t_personal *philo, char *msg)
 
 void	eating(t_personal *philo)
 {
-	usleep(philo->info->time_eat);
 	print_state(philo, "is eating");
+	usleep(philo->info->time_eat);
 	philo->num_eaten++;
 }
 
@@ -60,6 +58,20 @@ void	philo_even(t_personal *philo)
 
 }
 
+void	sleeping(t_personal *philo)
+{
+	print_state(philo, "is sleeping");
+	usleep(philo->info->time_sleep);
+	philo->num_eaten++;
+}
+
+void	thinking(t_personal *philo)
+{
+	print_state(philo, "is thinking");
+	usleep(5000);
+	philo->num_eaten++;
+}
+
 void	*ft_philosopher(void *data)
 {
 	t_personal *philo;
@@ -72,9 +84,8 @@ void	*ft_philosopher(void *data)
 			philo_even(philo);
 		if (philo->num_must_eat == philo->num_eaten)
 			break;
-		// sleeping(philo);
-		// thinking(philo);
-		printf("!!\n");
+		sleeping(philo);
+		thinking(philo);
 	}
 	return (NULL);
 }

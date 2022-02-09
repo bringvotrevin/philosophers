@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dim <dim@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: dim <dim@student.42seoul.kr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 16:49:52 by dim               #+#    #+#             */
-/*   Updated: 2022/02/08 17:38:22 by dim              ###   ########.fr       */
+/*   Updated: 2022/02/10 01:37:39 by dim              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ void	init_info(t_info *info)
 t_info	*parsing(int argc, char **argv)
 {
 	t_info	*info;
+	struct timeval	time;
 
 	if (check_error(argc))
 		return (NULL);
@@ -60,7 +61,9 @@ t_info	*parsing(int argc, char **argv)
 	info->time_die = ft_atoi(argv[2]);
 	info->time_eat = ft_atoi(argv[3]);
 	info->time_sleep = ft_atoi(argv[4]);
-	info->start_time = get_time(info->philosophers);
+	gettimeofday(&time, NULL);
+	info->start_time = (time.tv_usec);
+	printf("time : %ld\n", info->start_time);
 	if (argc == 6)
 		info->num_must_eat = ft_atoi(argv[5]);
 	if (info->num_of_philo < 0 || info->time_die < 0

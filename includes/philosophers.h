@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dim <dim@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: dim <dim@student.42seoul.kr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 16:39:23 by dim               #+#    #+#             */
-/*   Updated: 2022/02/08 17:35:34 by dim              ###   ########.fr       */
+/*   Updated: 2022/02/10 01:25:38 by dim              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,5 +45,6 @@ typedef struct s_personal
 
 t_info		*parsing(int argc, char **argv);
 int			error_p(char *msg);
+long		get_time(t_personal *philo);
 
 #endif
