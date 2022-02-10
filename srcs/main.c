@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dim <dim@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: dim <dim@student.42seoul.kr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 16:39:19 by dim               #+#    #+#             */
-/*   Updated: 2022/02/10 20:44:54 by dim              ###   ########.fr       */
+/*   Updated: 2022/02/11 01:17:06 by dim              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,8 @@ void	philo_odd(t_personal *philo)
 	eating(philo);
 	pthread_mutex_unlock(philo->right_fork);
 	pthread_mutex_unlock(philo->left_fork);
-	sleeping(philo);
-	thinking(philo);
+	// sleeping(philo);
+	// thinking(philo);
 }
 
 void	philo_even(t_personal *philo)
@@ -84,8 +84,8 @@ void	philo_even(t_personal *philo)
 	eating(philo);
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
-	sleeping(philo);
-	thinking(philo);
+	// sleeping(philo);
+	// thinking(philo);
 }
 
 void	*ft_philosopher(void *data)
@@ -100,8 +100,8 @@ void	*ft_philosopher(void *data)
 			philo_even(philo);
 		if (philo->info->num_must_eat == philo->cnt_eaten)
 			break;
-		// sleeping(philo);
-		// thinking(philo);
+		sleeping(philo);
+		thinking(philo);
 	}
 	return (NULL);
 }
@@ -115,37 +115,27 @@ int		create_thread(t_info *info)
 	{
 		if (pthread_create(&(info->philosophers[i].tid),
 			NULL, ft_philosopher, (void *)&info->philosophers[i]) != 0)
-			return (0);
+			return (ft_free(info, 15));
 	}
 	i = 0;
 	while (++i <= info->num_of_philo)
 		pthread_join(info->philosophers[i].tid, NULL);
-	return (0);
+	return (1);
 }
 
 int		malloc_ptr(t_info *info)
 {
 	info->philosophers = (t_personal *)malloc(sizeof
 							(t_personal) * (info->num_of_philo + 1));
-	info->philosophers = NULL;
 	if (info->philosophers == NULL)
-	{
-		ft_free(info, 8);
-		return (-1);
-	}
+		return (ft_free(info, 1));
 	info->forks = (pthread_mutex_t *)malloc(sizeof(
 						pthread_mutex_t) * (info->num_of_philo + 1));
 	if (info->forks == NULL)
-	{
-		ft_free(info, 1);
-		return (-1);
-	}
+		return (ft_free(info, 3));
 	info->mutex_for_print = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
 	if (info->mutex_for_print == NULL)
-	{
-		ft_free(info, 3);
-		return (-1);
-	}
+		return (ft_free(info, 7));
 	return (1);
 }
 
@@ -156,9 +146,9 @@ int		make_philo_fork(t_info *info)
 
 	i = 0;
 	status = malloc_ptr(info);
-	if (status == -1)
+	if (!status)
 		return (status);
-	pthread_mutex_init(&(info->mutex_for_print), NULL);
+	pthread_mutex_init(info->mutex_for_print, NULL);
 	while (i++ < info->num_of_philo)
 	{
 		pthread_mutex_init(&(info->forks[i]), NULL);
@@ -172,47 +162,6 @@ int		make_philo_fork(t_info *info)
 		// info->philosophers[i].m_print = &(info->mutex_for_print);
 	}
 	return (1);
-}
-void	ft_mutex_destroy(t_info *info)
-{
-	int i;
-
-	i = 0;
-	while(++i < info->num_of_philo)
-		pthread_mutex_destroy(info->fork[i], NULL);
-}
-
-void	ft_free(t_info *info, char flag)
-{
-	char	bit;
-
-	bit = 0b00000001;
-	if (flag & bit)
-	{
-		printf("bit : 00000001\n");
-		free(info);
-	}
-	if (flag & bit<<1)
-	{
-		printf("bit : 00000010\n");
-		free(info->philosophers);
-	}
-	if (flag & bit<<2)
-	{	
-		printf("bit : 00000100\n");
-		free(info->forks);
-	}
-	if (flag & bit<<3)
-	{
-		printf("bit : 00001000\n");
-		free(info->mutex_for_print);
-	}
-	if (flag & bit<<4)
-	{
-		printf("bit : 00010000\n");
-		ft_mutex_destroy(info);
-		pthread_mutex_destroy()
-	}
 }
 
 int		main(int argc, char *argv[])

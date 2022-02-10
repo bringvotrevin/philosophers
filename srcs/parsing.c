@@ -3,43 +3,42 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dim <dim@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: dim <dim@student.42seoul.kr>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 16:49:52 by dim               #+#    #+#             */
-/*   Updated: 2022/02/10 20:15:45 by dim              ###   ########.fr       */
+/*   Updated: 2022/02/11 01:16:52 by dim              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-void	ft_free(t_info *info, char flag)
+void	ft_mutex_destroy(t_info *info)
+{
+	int i;
+
+	i = 0;
+	while(++i < info->num_of_philo)
+		pthread_mutex_destroy(&info->forks[i]);
+}
+
+int	ft_free(t_info *info, char flag)
 {
 	char	bit;
 
 	bit = 0b00000001;
 	if (flag & bit)
-	{
-		printf("bit : 00000001\n");
 		free(info);
-	}
-	bit <<= 1;
-	if (flag & bit)
-	{
-		printf("bit : 00000010\n");
+	if (flag & bit<<1)
 		free(info->philosophers);
-	}
-	bit <<= 1;
-	if (flag & bit)
-	{	
-		printf("bit : 00000100\n");
+	if (flag & bit<<2)
 		free(info->forks);
-	}
-	bit <<= 1;
-	if (flag & bit)
+	if (flag & bit<<3)
 	{
-		printf("bit : 00001000\n");
 		free(info->mutex_for_print);
+		ft_mutex_destroy(info);
+		pthread_mutex_destroy(info->mutex_for_print);
 	}
+	return (0);
 }
 
 int		error_p(char *msg)
