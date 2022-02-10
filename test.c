@@ -4,25 +4,18 @@
 
 int	main(void)
 {
-	const char		*wday[] = {"일", "월", "화", "수", "목", "금", "토"};
-	struct timeval	unix;
-	struct tm		*date;
+	char	 msg;
+	char	bit;
 
-	if (gettimeofday(&unix, NULL) == -1)
-		return (1);
-	printf("Unix Time: %ld\t%d\n", unix.tv_sec, unix.tv_usec);
-	date = localtime(&(unix.tv_sec));
-	if (!date)
-		return (1);
-	printf("Date Time: %d년 %d월 %d일 %s요일 %02d시 %02d분 %02d초 %s\n",
-		   date->tm_year,
-		   date->tm_mon,
-		   date->tm_mday,
-		   wday[date->tm_wday],
-		   date->tm_hour,
-		   date->tm_min,
-		   date->tm_sec,
-		   date->tm_zone);
-	printf("%d days passed from Jan 1st\n", date->tm_yday);
+	bit = 0b00000001;
+	scanf("%c", &msg);
+	if (msg & bit)
+		printf("1\n");
+	if (msg & bit<<1)
+		printf("2\n");
+	if (msg & bit<<2)
+		printf("4\n");
+	if (msg & bit<<3)
+		printf("8\n");
 	return (0);
 }

@@ -6,6 +6,7 @@ CC = gcc
 RM = rm -rf
 WFLAGS = -Wall -Werror -Wextra
 INCFLAGS = -I$(HEADER)
+THIRDFLAGS = -lpthread
 DEBUGFLAGS = -g -fsanitize=address
 CFLAGS = $(WFLAGS) $(INCFLAGS) #$(DEBUGFLAGS)
 
@@ -16,10 +17,10 @@ SRCS = $(addprefix $(SRCDIR), $(SRC))
 
 OBJS = $(SRCS:.c=.o)
 
-${NAME} :	${OBJS}
-			$(CC) $(CFLAGS) $(OBJS) $(SRCS) -o $(NAME)
+$(NAME) :	$(OBJS)
+			$(CC) $(CFLAGS) $(THRIDFLAGS) $(OBJS) -o $(NAME)
 
-all : ${NAME}
+all : $(NAME)
 
 clean :
 			$(RM) $(OBJS)
