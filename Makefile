@@ -11,21 +11,22 @@ DEBUGFLAGS = -g -fsanitize=address
 CFLAGS = $(WFLAGS) $(INCFLAGS) #$(DEBUGFLAGS)
 
 SRC = main.c \
-		parsing.c
+	  parsing.c \
+	  util.c
 
 SRCS = $(addprefix $(SRCDIR), $(SRC))
 
 OBJS = $(SRCS:.c=.o)
 
-$(NAME) :	$(OBJS)
-			$(CC) $(CFLAGS) $(THRIDFLAGS) $(OBJS) -o $(NAME)
+$(NAME) : $(OBJS)
+		  $(CC) $(CFLAGS) $(THRIDFLAGS) $(OBJS) -o $(NAME)
 
 all : $(NAME)
 
 clean :
 			$(RM) $(OBJS)
 
-fclean :	clean
-			$(RM) $(NAME)
+fclean : clean
+		 $(RM) $(NAME)
 
-re :	fclean all
+re : fclean all

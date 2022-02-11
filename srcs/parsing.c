@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dim <dim@student.42seoul.kr>               +#+  +:+       +#+        */
+/*   By: dim <dim@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 16:49:52 by dim               #+#    #+#             */
-/*   Updated: 2022/02/11 01:16:52 by dim              ###   ########.fr       */
+/*   Updated: 2022/02/11 21:27:01 by dim              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,38 +33,14 @@ int	ft_free(t_info *info, char flag)
 	if (flag & bit<<2)
 		free(info->forks);
 	if (flag & bit<<3)
-	{
 		free(info->mutex_for_print);
+	if (flag & bit<<4)
+	{
+		free(info->mutex_for_check);
 		ft_mutex_destroy(info);
 		pthread_mutex_destroy(info->mutex_for_print);
 	}
 	return (0);
-}
-
-int		error_p(char *msg)
-{
-	printf("%s\n", msg);
-	return (0);
-}
-
-int		ft_atoi(char *str)
-{
-	int	num;
-
-	num = 0;
-	while((*str >= '0' && *str <= '9'))
-	{
-		num = num * 10 + *str - '0';
-		str++;
-	}
-	return (num);
-}
-
-int		check_error(int argc)
-{
-	if (argc == 5 || argc == 6)
-		return (0);
-	return (-1);
 }
 
 void	init_info(t_info *info)
@@ -81,12 +57,13 @@ t_info	*parsing(int argc, char **argv)
 {
 	t_info	*info;
 
-	if (check_error(argc))
+	if (argc != 5 && argc != 6)
 		return (NULL);
 	info = (t_info *)malloc(sizeof(t_info));
 	if (info == NULL)
 		return (NULL);
 	init_info(info);
+	info->alive = true;
 	info->num_of_philo = ft_atoi(argv[1]);
 	info->time_die = ft_atoi(argv[2]);
 	info->time_eat = ft_atoi(argv[3]);
