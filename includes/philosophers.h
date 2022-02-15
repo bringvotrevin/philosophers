@@ -6,7 +6,7 @@
 /*   By: dim <dim@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 16:39:23 by dim               #+#    #+#             */
-/*   Updated: 2022/02/15 17:14:17 by dim              ###   ########.fr       */
+/*   Updated: 2022/02/15 19:53:00 by dim              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,12 @@ typedef struct s_personal
 
 t_info		*parsing(int argc, char **argv);
 
-long		get_mstime(void);
-void		ft_mssleep(long usleep_time);
-int			error_p(char *msg);
-int			ft_atoi(char *str);
+void	print_state(t_personal *philo, char *msg);
+long	get_mstime(void);
+void	ft_mssleep(long usleep_time);
+int		error_p(char *msg);
+int		ft_atoi(char *str);
 
-int			ft_free(t_info *info, char flag);
+int		ft_free(t_info *info, char flag);
 
 #endif

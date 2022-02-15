@@ -6,38 +6,16 @@
 /*   By: dim <dim@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 16:39:19 by dim               #+#    #+#             */
-/*   Updated: 2022/02/15 19:41:20 by dim              ###   ########.fr       */
+/*   Updated: 2022/02/15 19:55:57 by dim              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-void	print_state(t_personal *philo, char *msg, int eat_flag)
-{
-	long	time;
-
-	pthread_mutex_lock(philo->info->mutex_for_print);
-	if (philo->info->alive)
-	{
-		// time = get_mstime();
-		// printf("%ld", time - philo->info->start_time);
-		time = get_mstime() - philo->info->start_time;
-		printf("%ld", time);
-		printf(" %d %s\n", philo->name, msg);
-		(void)eat_flag;
-		// if (eat_flag)
-		// {
-		// 	philo->time_last_eat = time;
-		// 	philo->cnt_eaten++;
-		// }
-	}
-	pthread_mutex_unlock(philo->info->mutex_for_print);
-}
-
 void	eating(t_personal *philo)
 {
 	// pthread_mutex_lock(philo->info->mutex_for_check);
-	print_state(philo, "is eating", 1);
+	print_state(philo, "is eating");
 	if (philo->info->alive)
 	{
 		philo->time_last_eat = get_mstime();
@@ -56,23 +34,23 @@ void	eating(t_personal *philo)
 
 void	sleeping(t_personal *philo)
 {
-	print_state(philo, "is sleeping", 0);
+	print_state(philo, "is sleeping");
 	if (philo->info->alive)
 		ft_mssleep(philo->info->time_sleep);
 }
 
 void	thinking(t_personal *philo)
 {
-	print_state(philo, "is thinking", 0);
+	print_state(philo, "is thinking");
 	usleep(200);
 }
 
 void	philo_odd(t_personal *philo)
 {
 	pthread_mutex_lock(philo->right_fork);
-	print_state(philo, "has taken a fork", 0);
+	print_state(philo, "has taken a fork");
 	pthread_mutex_lock(philo->left_fork);
-	print_state(philo, "has taken a fork", 0);
+	print_state(philo, "has taken a fork");
 	eating(philo);
 	pthread_mutex_unlock(philo->right_fork);
 	pthread_mutex_unlock(philo->left_fork);
@@ -81,9 +59,9 @@ void	philo_odd(t_personal *philo)
 void	philo_even(t_personal *philo)
 {
 	pthread_mutex_lock(philo->left_fork);
-	print_state(philo, "has taken a fork", 0);
+	print_state(philo, "has taken a fork");
 	pthread_mutex_lock(philo->right_fork);
-	print_state(philo, "has taken a fork", 0);
+	print_state(philo, "has taken a fork");
 	eating(philo);
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
@@ -96,7 +74,7 @@ void	*ft_philosopher(void *data)
 	philo = (t_personal *)data;
 	if (philo->info->num_of_philo == 1)
 	{
-		print_state(philo, "has taken a fork", 0);
+		print_state(philo, "has taken a fork");
 		return (NULL);
 	}
 	while (philo->info->alive)
@@ -134,7 +112,7 @@ void	check_philos(t_info *info)
 				> info->time_die)
 			{
 				// pthread_mutex_lock(info->mutex_for_check);
-				print_state(&info->philosophers[i], "died", 0);
+				print_state(&info->philosophers[i], "died");
 				info->alive = false;
 				// pthread_mutex_unlock(info->mutex_for_check);
 			}

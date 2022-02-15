@@ -6,7 +6,7 @@
 /*   By: dim <dim@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 16:49:52 by dim               #+#    #+#             */
-/*   Updated: 2022/02/15 19:36:09 by dim              ###   ########.fr       */
+/*   Updated: 2022/02/15 19:54:24 by dim              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,10 @@ int	ft_free(t_info *info, char flag)
 	bit = 0b00000001;
 	if (flag & bit<<4)
 	{
-		free(info->mutex_for_check);
 		pthread_mutex_destroy(info->mutex_for_print);
 		pthread_mutex_destroy(info->mutex_for_check);
 		ft_mutex_forks_destroy(info);
+		free(info->mutex_for_check);
 	}
 	if (flag & bit<<3)
 		free(info->mutex_for_print);
