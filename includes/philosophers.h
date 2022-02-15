@@ -6,7 +6,7 @@
 /*   By: dim <dim@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 16:39:23 by dim               #+#    #+#             */
-/*   Updated: 2022/02/11 20:56:50 by dim              ###   ########.fr       */
+/*   Updated: 2022/02/15 17:14:17 by dim              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ typedef struct s_info
 	int					time_eat;
 	int					time_sleep;
 	int					num_must_eat;
+	int					done_philo;
 	struct s_personal	*philosophers;
 	pthread_mutex_t		*forks;
 	pthread_mutex_t		*mutex_for_print;
@@ -48,7 +49,7 @@ typedef struct s_personal
 t_info		*parsing(int argc, char **argv);
 
 long		get_mstime(void);
-void		ft_usleep(long usleep_time);
+void		ft_mssleep(long usleep_time);
 int			error_p(char *msg);
 int			ft_atoi(char *str);
 

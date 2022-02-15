@@ -6,7 +6,7 @@
 /*   By: dim <dim@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 16:39:19 by dim               #+#    #+#             */
-/*   Updated: 2022/02/11 21:25:24 by dim              ###   ########.fr       */
+/*   Updated: 2022/02/15 19:41:20 by dim              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,15 @@ void	print_state(t_personal *philo, char *msg, int eat_flag)
 	pthread_mutex_lock(philo->info->mutex_for_print);
 	if (philo->info->alive)
 	{
+		// time = get_mstime();
+		// printf("%ld", time - philo->info->start_time);
 		time = get_mstime() - philo->info->start_time;
-		printf("%ldms", time);
+		printf("%ld", time);
 		printf(" %d %s\n", philo->name, msg);
 		(void)eat_flag;
 		// if (eat_flag)
 		// {
-		// 	// philo->time_last_eat = time;
+		// 	philo->time_last_eat = time;
 		// 	philo->cnt_eaten++;
 		// }
 	}
@@ -34,27 +36,35 @@ void	print_state(t_personal *philo, char *msg, int eat_flag)
 
 void	eating(t_personal *philo)
 {
-	pthread_mutex_lock(philo->info->mutex_for_check);
+	// pthread_mutex_lock(philo->info->mutex_for_check);
 	print_state(philo, "is eating", 1);
 	if (philo->info->alive)
 	{
-		ft_usleep(philo->info->time_eat);
 		philo->time_last_eat = get_mstime();
 		philo->cnt_eaten++;
+		ft_mssleep(philo->info->time_eat);
+		if (philo->info->num_must_eat == philo->cnt_eaten)
+		{
+			pthread_mutex_lock(philo->info->mutex_for_check);
+			philo->info->done_philo++;
+			pthread_mutex_unlock(philo->info->mutex_for_check);
+		}
+		// printf("------%d philo has eaten %d times------\n", philo->name, philo->cnt_eaten);
 	}
-	pthread_mutex_lock(philo->info->mutex_for_check);
+	// pthread_mutex_unlock(philo->info->mutex_for_check);
 }
 
 void	sleeping(t_personal *philo)
 {
 	print_state(philo, "is sleeping", 0);
 	if (philo->info->alive)
-		ft_usleep(philo->info->time_sleep);
+		ft_mssleep(philo->info->time_sleep);
 }
 
 void	thinking(t_personal *philo)
 {
 	print_state(philo, "is thinking", 0);
+	usleep(200);
 }
 
 void	philo_odd(t_personal *philo)
@@ -66,8 +76,6 @@ void	philo_odd(t_personal *philo)
 	eating(philo);
 	pthread_mutex_unlock(philo->right_fork);
 	pthread_mutex_unlock(philo->left_fork);
-	// sleeping(philo);
-	// thinking(philo);
 }
 
 void	philo_even(t_personal *philo)
@@ -79,25 +87,26 @@ void	philo_even(t_personal *philo)
 	eating(philo);
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
-	// sleeping(philo);
-	// thinking(philo);
 }
 
 void	*ft_philosopher(void *data)
 {
 	t_personal	*philo;
-	bool		*alive;
 
 	philo = (t_personal *)data;
-	alive = &philo->info->alive;
-	while(alive)
+	if (philo->info->num_of_philo == 1)
+	{
+		print_state(philo, "has taken a fork", 0);
+		return (NULL);
+	}
+	while (philo->info->alive)
 	{
 		if (philo->name % 2 == 1)
 			philo_odd(philo);
 		else
 			philo_even(philo);
-		if (philo->info->num_must_eat == philo->cnt_eaten || alive)
-			break;
+		// if (philo->info->num_must_eat == philo->cnt_eaten)
+		// 	break;
 		sleeping(philo);
 		thinking(philo);
 	}
@@ -115,13 +124,22 @@ void	check_philos(t_info *info)
 		while (++i <= info->num_of_philo && info->alive)
 		{
 			pthread_mutex_lock(info->mutex_for_check);
-			if (get_mstime() - info->philosophers[i].time_last_eat 
-				> info->time_die)
+			if (info->done_philo == info->num_of_philo)
+			{
+				// pthread_mutex_lock(info->mutex_for_check);
 				info->alive = false;
+				// pthread_mutex_unlock(info->mutex_for_check);
+			}
+			else if (get_mstime() - info->philosophers[i].time_last_eat
+				> info->time_die)
+			{
+				// pthread_mutex_lock(info->mutex_for_check);
+				print_state(&info->philosophers[i], "died", 0);
+				info->alive = false;
+				// pthread_mutex_unlock(info->mutex_for_check);
+			}
 			pthread_mutex_unlock(info->mutex_for_check);
 		}
-		if (info->alive == false)
-			break;
 	}
 }
 
@@ -172,16 +190,22 @@ int		make_philo_fork(t_info *info)
 	if (!status)
 		return (status);
 	pthread_mutex_init(info->mutex_for_print, NULL);
-	pthread_mutex_init(info->mutex_for_print, NULL);
+	pthread_mutex_init(info->mutex_for_check, NULL);
 	while (i++ < info->num_of_philo)
 	{
 		pthread_mutex_init(&(info->forks[i]), NULL);
 		info->philosophers[i].name = i;
 		info->philosophers[i].cnt_eaten = 0;
+		info->philosophers[i].time_last_eat = info->start_time;
 		info->philosophers[i].info = info;
 		info->philosophers[i].left_fork = &info->forks[i];
-		info->philosophers[i].right_fork =
-			&info->forks[(i + 1) % info->num_of_philo];
+		if (info->num_of_philo == 1)
+			info->philosophers[i].right_fork = &info->forks[i];
+		else if (i + 1 == info->num_of_philo)
+			info->philosophers[i].right_fork = &info->forks[info->num_of_philo];
+		else
+			info->philosophers[i].right_fork =
+				&info->forks[(i + 1) % info->num_of_philo];
 	}
 	return (1);
 }
@@ -197,7 +221,6 @@ int		main(int argc, char *argv[])
 		return (error_p("creating error"));
 	if (!create_thread(info))
 		return (0);
-	ft_free(info, 15);
+	ft_free(info, 31);
 	return (0);
 }
-

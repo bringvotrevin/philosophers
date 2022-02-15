@@ -1,13 +1,14 @@
 .PHONY : bonus all clean fclean re
 NAME = philo
-HEADER = includes
 SRCDIR = srcs/
-CC = gcc
+HEADER = includes
 RM = rm -rf
-WFLAGS = -Wall -Werror -Wextra
+CC = gcc
 INCFLAGS = -I$(HEADER)
+WFLAGS = -Wall -Werror -Wextra
 THIRDFLAGS = -lpthread
 DEBUGFLAGS = -g -fsanitize=address
+
 CFLAGS = $(WFLAGS) $(INCFLAGS) #$(DEBUGFLAGS)
 
 SRC = main.c \
@@ -19,14 +20,14 @@ SRCS = $(addprefix $(SRCDIR), $(SRC))
 OBJS = $(SRCS:.c=.o)
 
 $(NAME) : $(OBJS)
-		  $(CC) $(CFLAGS) $(THRIDFLAGS) $(OBJS) -o $(NAME)
+		$(CC) $(CFLAGS) $(THRIDFLAGS) $(OBJS) -o $(NAME)
 
 all : $(NAME)
 
 clean :
-			$(RM) $(OBJS)
+		$(RM) $(OBJS)
 
 fclean : clean
-		 $(RM) $(NAME)
+		$(RM) $(NAME)
 
 re : fclean all

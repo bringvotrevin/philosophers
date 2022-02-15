@@ -6,13 +6,13 @@
 /*   By: dim <dim@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 16:49:52 by dim               #+#    #+#             */
-/*   Updated: 2022/02/11 21:27:01 by dim              ###   ########.fr       */
+/*   Updated: 2022/02/15 19:36:09 by dim              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-void	ft_mutex_destroy(t_info *info)
+void	ft_mutex_forks_destroy(t_info *info)
 {
 	int i;
 
@@ -26,20 +26,21 @@ int	ft_free(t_info *info, char flag)
 	char	bit;
 
 	bit = 0b00000001;
-	if (flag & bit)
-		free(info);
-	if (flag & bit<<1)
-		free(info->philosophers);
-	if (flag & bit<<2)
-		free(info->forks);
-	if (flag & bit<<3)
-		free(info->mutex_for_print);
 	if (flag & bit<<4)
 	{
 		free(info->mutex_for_check);
-		ft_mutex_destroy(info);
 		pthread_mutex_destroy(info->mutex_for_print);
+		pthread_mutex_destroy(info->mutex_for_check);
+		ft_mutex_forks_destroy(info);
 	}
+	if (flag & bit<<3)
+		free(info->mutex_for_print);
+	if (flag & bit<<2)
+		free(info->forks);
+	if (flag & bit<<1)
+		free(info->philosophers);
+	if (flag & bit)
+		free(info);
 	return (0);
 }
 
@@ -50,6 +51,7 @@ void	init_info(t_info *info)
 	info->time_eat = 0;
 	info->time_sleep = 0;
 	info->num_must_eat = -1;
+	info->done_philo = 0;
 	info->start_time = 0;
 }
 
@@ -69,7 +71,6 @@ t_info	*parsing(int argc, char **argv)
 	info->time_eat = ft_atoi(argv[3]);
 	info->time_sleep = ft_atoi(argv[4]);
 	info->start_time = get_mstime();
-	printf("time : %ld\n", info->start_time);
 	if (argc == 6)
 		info->num_must_eat = ft_atoi(argv[5]);
 	if (info->num_of_philo < 0 || info->time_die < 0
