@@ -13,6 +13,10 @@ CFLAGS = $(WFLAGS) $(INCFLAGS) #$(DEBUGFLAGS)
 
 SRC = main.c \
 	  parsing.c \
+	  create_thread.c \
+	  make_philo_fork.c \
+	  sleep_think.c \
+	  check.c \
 	  util.c
 
 SRCS = $(addprefix $(SRCDIR), $(SRC))

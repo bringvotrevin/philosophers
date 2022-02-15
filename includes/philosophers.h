@@ -6,7 +6,7 @@
 /*   By: dim <dim@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 16:39:23 by dim               #+#    #+#             */
-/*   Updated: 2022/02/15 19:53:00 by dim              ###   ########.fr       */
+/*   Updated: 2022/02/15 20:23:19 by dim              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,10 @@ typedef struct s_personal
 	pthread_t		tid;
 }	t_personal;
 
-t_info		*parsing(int argc, char **argv);
+int		ft_free(t_info *info, char flag);
+int		malloc_ptr(t_info *info);
+void	init_mutex(t_info *info);
+int		make_philo_fork(t_info *info);
 
 void	print_state(t_personal *philo, char *msg);
 long	get_mstime(void);
@@ -54,6 +57,13 @@ void	ft_mssleep(long usleep_time);
 int		error_p(char *msg);
 int		ft_atoi(char *str);
 
-int		ft_free(t_info *info, char flag);
+void	sleeping(t_personal *philo);
+void	thinking(t_personal *philo);
+
+void	check_philos(t_info *info);
+int		create_thread(t_info *info);
+void	*ft_philosopher(void *data);
+
+t_info	*parsing(int argc, char **argv);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: dim <dim@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 16:52:38 by dim               #+#    #+#             */
-/*   Updated: 2022/02/15 19:53:01 by dim              ###   ########.fr       */
+/*   Updated: 2022/02/15 20:15:30 by dim              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,18 +43,18 @@ void	ft_mssleep(long	sleep_time)
 		usleep(100);
 }
 
-int		error_p(char *msg)
+int	error_p(char *msg)
 {
 	printf("%s\n", msg);
 	return (0);
 }
 
-int		ft_atoi(char *str)
+int	ft_atoi(char *str)
 {
 	int	num;
 
 	num = 0;
-	while((*str >= '0' && *str <= '9'))
+	while ((*str >= '0' && *str <= '9'))
 	{
 		num = num * 10 + *str - '0';
 		str++;
