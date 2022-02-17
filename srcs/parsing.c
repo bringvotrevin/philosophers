@@ -6,7 +6,7 @@
 /*   By: dim <dim@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 16:49:52 by dim               #+#    #+#             */
-/*   Updated: 2022/02/15 19:54:24 by dim              ###   ########.fr       */
+/*   Updated: 2022/02/17 14:39:59 by dim              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 void	ft_mutex_forks_destroy(t_info *info)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	while(++i < info->num_of_philo)
+	while (++i < info->num_of_philo)
 		pthread_mutex_destroy(&info->forks[i]);
 }
 
@@ -26,18 +26,18 @@ int	ft_free(t_info *info, char flag)
 	char	bit;
 
 	bit = 0b00000001;
-	if (flag & bit<<4)
+	if (flag & bit << 4)
 	{
 		pthread_mutex_destroy(info->mutex_for_print);
 		pthread_mutex_destroy(info->mutex_for_check);
 		ft_mutex_forks_destroy(info);
 		free(info->mutex_for_check);
 	}
-	if (flag & bit<<3)
+	if (flag & bit << 3)
 		free(info->mutex_for_print);
-	if (flag & bit<<2)
+	if (flag & bit << 2)
 		free(info->forks);
-	if (flag & bit<<1)
+	if (flag & bit << 1)
 		free(info->philosophers);
 	if (flag & bit)
 		free(info);
