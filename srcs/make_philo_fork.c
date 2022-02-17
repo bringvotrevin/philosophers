@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   make_init.c                                        :+:      :+:    :+:   */
+/*   make_philo_fork.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dim <dim@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/15 20:10:13 by dim               #+#    #+#             */
-/*   Updated: 2022/02/15 20:16:31 by dim              ###   ########.fr       */
+/*   Updated: 2022/02/17 17:20:12 by dim              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,19 +22,13 @@ int	malloc_ptr(t_info *info)
 			(pthread_mutex_t) * (info->num_of_philo + 1));
 	if (info->forks == NULL)
 		return (ft_free(info, 3));
-	info->mutex_for_print = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
-	if (info->mutex_for_print == NULL)
-		return (ft_free(info, 7));
-	info->mutex_for_check = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
-	if (info->mutex_for_check == NULL)
-		return (ft_free(info, 15));
 	return (1);
 }
 
 void	init_mutex(t_info *info)
 {
-	pthread_mutex_init(info->mutex_for_print, NULL);
-	pthread_mutex_init(info->mutex_for_check, NULL);
+	pthread_mutex_init(&info->mutex_for_print, NULL);
+	pthread_mutex_init(&info->mutex_for_check, NULL);
 }
 
 int	make_philo_fork(t_info *info)

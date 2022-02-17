@@ -6,17 +6,14 @@
 /*   By: dim <dim@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 16:39:23 by dim               #+#    #+#             */
-/*   Updated: 2022/02/17 14:40:53 by dim              ###   ########.fr       */
+/*   Updated: 2022/02/17 17:22:34 by dim              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILOSOPHERS_H
 # define PHILOSOPHERS_H
-# include <stdio.h>
 # include <stdlib.h>
-# include <sys/time.h>
 # include <pthread.h>
-# include <unistd.h>
 # include <stdbool.h>
 
 typedef struct s_info
@@ -30,8 +27,8 @@ typedef struct s_info
 	int					done_philo;
 	struct s_personal	*philosophers;
 	pthread_mutex_t		*forks;
-	pthread_mutex_t		*mutex_for_print;
-	pthread_mutex_t		*mutex_for_check;
+	pthread_mutex_t		mutex_for_print;
+	pthread_mutex_t		mutex_for_check;
 	long				start_time;
 }	t_info;
 
@@ -61,8 +58,8 @@ void	sleeping(t_personal *philo);
 void	thinking(t_personal *philo);
 
 void	check_philos(t_info *info);
-int		create_thread(t_info *info);
 void	*ft_philosopher(void *data);
+int		create_thread(t_info *info);
 
 t_info	*parsing(int argc, char **argv);
 

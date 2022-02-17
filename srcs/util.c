@@ -6,24 +6,27 @@
 /*   By: dim <dim@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 16:52:38 by dim               #+#    #+#             */
-/*   Updated: 2022/02/15 20:15:30 by dim              ###   ########.fr       */
+/*   Updated: 2022/02/17 17:22:16 by dim              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <sys/time.h>
+#include <unistd.h>
+#include <stdio.h>
 #include "philosophers.h"
 
 void	print_state(t_personal *philo, char *msg)
 {
 	long	time;
 
-	pthread_mutex_lock(philo->info->mutex_for_print);
+	pthread_mutex_lock(&(philo->info->mutex_for_print));
 	if (philo->info->alive)
 	{
 		time = get_mstime() - philo->info->start_time;
 		printf("%ld", time);
 		printf(" %d %s\n", philo->name, msg);
 	}
-	pthread_mutex_unlock(philo->info->mutex_for_print);
+	pthread_mutex_unlock(&(philo->info->mutex_for_print));
 }
 
 long	get_mstime(void)

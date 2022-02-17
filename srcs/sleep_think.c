@@ -6,10 +6,11 @@
 /*   By: dim <dim@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/15 20:13:29 by dim               #+#    #+#             */
-/*   Updated: 2022/02/15 20:14:57 by dim              ###   ########.fr       */
+/*   Updated: 2022/02/17 17:21:46 by dim              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <unistd.h>
 #include "philosophers.h"
 
 void	sleeping(t_personal *philo)
