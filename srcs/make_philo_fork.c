@@ -6,7 +6,7 @@
 /*   By: dim <dim@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/15 20:10:13 by dim               #+#    #+#             */
-/*   Updated: 2022/02/17 17:20:12 by dim              ###   ########.fr       */
+/*   Updated: 2022/02/20 15:06:20 by dim              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	make_philo_fork(t_info *info)
 		pthread_mutex_init(&(info->forks[i]), NULL);
 		info->philosophers[i].name = i;
 		info->philosophers[i].cnt_eaten = 0;
-		info->philosophers[i].time_last_eat = info->start_time;
+		info->philosophers[i].time_last_eat = get_mstime();
 		info->philosophers[i].info = info;
 		info->philosophers[i].left_fork = &info->forks[i];
 		if (info->num_of_philo == 1)

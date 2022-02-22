@@ -6,7 +6,7 @@
 /*   By: dim <dim@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 16:52:38 by dim               #+#    #+#             */
-/*   Updated: 2022/02/17 17:22:16 by dim              ###   ########.fr       */
+/*   Updated: 2022/02/20 15:07:17 by dim              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	print_state(t_personal *philo, char *msg)
 	if (philo->info->alive)
 	{
 		time = get_mstime() - philo->info->start_time;
-		printf("%ld", time);
+		printf("%ldms", time);
 		printf(" %d %s\n", philo->name, msg);
 	}
 	pthread_mutex_unlock(&(philo->info->mutex_for_print));
